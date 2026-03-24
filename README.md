@@ -6,14 +6,14 @@ A comprehensive collection of ML projects progressing from classical machine lea
 
 | # | Project | Status | Tech Stack | Timeline |
 |---|---------|--------|------------|----------|
-| 01 | [Spam Email Classifier](./01_spam_email_classifier/) | ✅ Complete | scikit-learn, pandas, Flask | Week 4-5 |
-| 02 | [House Price Predictor](./02_house_price_predictor/) | ✅ Complete | XGBoost, pandas, matplotlib | Week 6-7 |
-| 03 | [Image Classifier](./03_image_classifier/) | ✅ Complete | PyTorch, torchvision, ResNet | Week 8-10 |
-| 04 | [Sentiment Analyzer](./04_sentiment_analyzer/) | ✅ Complete | PyTorch, HuggingFace, BERT | Week 11-13 |
-| 05 | [RAG Q&A Bot](./05_rag_qa_bot/) | ✅ Complete | LangChain, ChromaDB, OpenAI | Week 14-18 |
-| 06 | [Fine-tuned LLM](./06_finetuned_llm/) | ✅ Complete | HuggingFace, PEFT, LoRA | Week 18-22 |
-| 07 | [Android ML App](./07_android_ml_app/) | ✅ Complete | TFLite, ONNX, Kotlin | Week 22-25 |
-| 08 | [Production ML System](./08_production_ml_system/) | ✅ Complete | MLflow, FastAPI, Docker | Week 25-32 |
+| 01 | [Spam Email Classifier](./01_spam_email_classifier/) |  scikit-learn, pandas|
+| 02 | [House Price Predictor](./02_house_price_predictor/) | XGBoost, pandas, matplotlib  |
+| 03 | [Image Classifier](./03_image_classifier/) | PyTorch, torchvision, ResNet |
+| 04 | [Sentiment Analyzer](./04_sentiment_analyzer/) | PyTorch, HuggingFace, BERT  |
+| 05 | [RAG Q&A Bot](./05_rag_qa_bot/) | LangChain, ChromaDB, OpenAI  |
+| 06 | [Fine-tuned LLM](./06_finetuned_llm/) | HuggingFace, PEFT, LoRA  |
+| 07 | [Android ML App](./07_android_ml_app/) | TFLite, ONNX, Kotlin |
+| 08 | [Production ML System](./08_production_ml_system/) | MLflow, FastAPI, Docker  |
 
 ## Project Categories
 
