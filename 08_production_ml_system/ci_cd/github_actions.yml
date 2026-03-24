@@ -1,0 +1,121 @@
+# GitHub Actions workflow for ML pipeline
+# Save as .github/workflows/ml-pipeline.yml in your repo
+
+name: ML Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'training/**'
+      - 'serving/**'
+      - 'requirements.txt'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      retrain:
+        description: 'Force model retraining'
+        required: false
+        default: 'false'
+
+env:
+  PYTHON_VERSION: '3.11'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/ml-api
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+      
+      - name: Run tests
+        run: |
+          pytest tests/ --cov=serving --cov-report=xml
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+
+  train:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event.inputs.retrain == 'true' || contains(github.event.head_commit.message, '[retrain]')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Train model
+        run: python training/train.py
+      
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model
+          path: serving/model/
+
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: model
+          path: serving/model/
+        continue-on-error: true
+      
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: serving/docker/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # Add deployment commands here
+          # e.g., kubectl set image, AWS ECS update, etc.
