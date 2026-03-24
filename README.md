@@ -4,7 +4,7 @@ A comprehensive collection of ML projects progressing from classical machine lea
 
 ## Progress Tracker
 
-| # | Project | Status | Tech Stack | Timeline |
+| # | Project | Tech Stack |
 |---|---------|--------|------------|----------|
 | 01 | [Spam Email Classifier](./01_spam_email_classifier/) |  scikit-learn, pandas|
 | 02 | [House Price Predictor](./02_house_price_predictor/) | XGBoost, pandas, matplotlib  |
